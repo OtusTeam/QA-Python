@@ -30,13 +30,17 @@
 
 #### Статьи:
 
-[Создание виртуального окружения](https://timeweb.cloud/tutorials/python/kak-sozdat-virtualnoe-okruzhenie)
-
 [Настройка учетной записи GitHub](https://docs.github.com/ru/get-started/onboarding/getting-started-with-your-github-account)
+
+[Создание SSH-ключа и его добавление в ssh-agent](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent)
+
+[Добавление SSH-ключа к учётной записи GitHub](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
 [Создание репозитория](https://docs.github.com/ru/repositories/creating-and-managing-repositories/creating-a-new-repository)
 
 [Клонирование репозитория](https://docs.github.com/ru/repositories/creating-and-managing-repositories/cloning-a-repository)
+
+[Создание виртуального окружения](https://timeweb.cloud/tutorials/python/kak-sozdat-virtualnoe-okruzhenie)
 
 [Ветвление в Git](https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
 
