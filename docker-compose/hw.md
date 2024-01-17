@@ -80,29 +80,8 @@ tests/test_ui_opencart.py::test_main_page_open_product PASSED            [100%]
 Так как opencart не стартует мгновенно, при запуске сервиса с тестами нужно организовать ожидание, пока opencart полностью
 перейдёт в рабочее состояние.
 
-Для этого можно использовать следующий скрипт:
-
-```shell
-#!/bin/sh
-
-set -e
-
-host="$1"
-port="$2"
-shift 2
-cmd="$@"
-
-# Wait for the port to become available
-until nc -z "$host" "$port"; do
-  >&2 echo "Waiting for $host:$port to become available..."
-  sleep 1
-done
-
->&2 echo "$host:$port is available, executing command: $cmd"
-exec $cmd
-```
-
-Текст этого скрипта нужно сохранить в файл с названием `wait-for-it.sh` и добавить в образ с тестами.
+Для этого можно использовать скрипт [wait-for-it.sh](wait-for-it.sh). Подробнее про этот скрипт можно почитать [тут](wait-for-it.md). 
+Текст этого скрипта нужно сохранить в файл с названием `wait-for-it.sh`, сделать файл исполняемым (`chmod +x wait-for-it.sh`) и добавить в образ с тестами.
 
 В `docker-compose.yml` в инструкции `command` сервиса `tests` данный скрипт можно использовать так:
 
