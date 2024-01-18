@@ -1,0 +1,39 @@
+{
+  "top_ips": {
+    "1.1.1.1": 4,
+    "2.2.2.2": 3,
+    "3.3.3.3": 2
+  },
+  "top_longest": [
+    {
+      "ip": "1.1.1.1",
+      "date": "[06/Jan/2016:12:00:02 +0100]",
+      "method": "GET",
+      "url": "http://www.test.com/index.php",
+      "duration": 5000
+    },
+    {
+      "ip": "2.2.2.2",
+      "date": "[06/Jan/2016:18:47:57 +0100]",
+      "method": "GET",
+      "url": "http://www.test2.com/index.php?view=category",
+      "duration": 4999
+    },
+    {
+      "ip": "3.3.3.3",
+      "date": "[23/Dec/2015:07:27:57 +0100]",
+      "method": "POST",
+      "url": "-",
+      "duration": 4998
+    }
+  ],
+  "total_stat": {
+    "GET": 4,
+    "POST": 2,
+    "HEAD": 1,
+    "PUT": 1,
+    "OPTIONS": 1,
+    "DELETE": 1
+  },
+  "total_requests": 10
+}
