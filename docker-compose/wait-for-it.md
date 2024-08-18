@@ -36,6 +36,28 @@ done
 
 `nc -z "$host" "$port"` - проверяет доступность порта, и цикл будет продолжаться, пока порт недоступен.
 
+**Важно!** Скрипт [wait-for-it.sh](wait-for-it.sh) использует утилиту `nc`. Таким образом при сборке образа контейнера 
+с тестами может потребоваться установить пакет содержащий эту утилиту.
+Например, если в качестве базового образа для контейнера с тестами мы используем `python:latest`, то по-умолчанию в рамках контейнера созданного на основе этого образа не будет утилиты `nc`:
+```shell
+root@65536792de98:/tests# nc
+bash: nc: command not found
+```
+Таким образом для работы с этой утилитой понадобится дополнительно установить пакет [netcat-traditional](https://manpages.debian.org/unstable/netcat-traditional/nc.traditional.1.en.html).
+Для этого надо в `Dockerfile` образа с тестами добавить директиву:
+```dockerfile
+RUN apt update && apt install -y netcat-traditional
+```
+После сборки образа внутри контейнера с тестами утилита `nc` будет доступна:
+```shell
+root@65536792de98:/tests# nc -h
+[v1.10-46]
+connect to somewhere:	nc [-options] hostname port[s] [ports] ... 
+listen for inbound:	nc -l -p port [-options] [hostname] [port]
+...
+```
+
+
 `>&2 echo "Waiting for $host:$port to become available..."` - эта команда выводит сообщение ожидания на стандартный поток ошибок (stderr), `>&2` перенаправляет вывод на stderr.
 
 `sleep 1` - приостанавливает выполнение скрипта на 1 секунду перед следующей итерацией цикла.

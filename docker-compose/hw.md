@@ -83,11 +83,12 @@ tests/test_ui_opencart.py::test_main_page_open_product PASSED            [100%]
 Для этого можно использовать скрипт [wait-for-it.sh](wait-for-it.sh). Подробнее про этот скрипт можно почитать [тут](wait-for-it.md). 
 Текст этого скрипта нужно сохранить в файл с названием `wait-for-it.sh`, сделать файл исполняемым (`chmod +x wait-for-it.sh`) и добавить в образ с тестами.
 
-В `docker-compose.yml` в инструкции `command` сервиса `tests` данный скрипт можно использовать так:
-
+В `docker-compose.yml` в инструкции `command` сервиса `tests` скрипт [wait-for-it.sh](wait-for-it.sh) можно использовать так:
 ```shell
-command: ./wait-for-it.sh opencart 8080 -- pytest -v tests/test_ui_opencart.py --opencart_url http://opencart:8080 --browser chrome --browser_version 120.0 --executor selenoid
+command: ./wait-for-it.sh opencart 8080 pytest -v tests/test_ui_opencart.py --opencart_url http://opencart:8080 --browser chrome --browser_version 120.0 --executor selenoid
 ```
+
+**Важно!** Для того, чтобы сработала команда, указанная в директиве `command` файла `docker-compose.yml` нужно чтобы в `Dockerfile` образа с тестами для запуска тестов использовалась директива `CMD`.
 
 Таким образом при запуске `docker-compose` контейнер с тестами дождётся пока запустится opencart и затем запустит тесты.
 
