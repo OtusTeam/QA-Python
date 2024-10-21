@@ -31,7 +31,7 @@ docker run -d --name selenoid-ui --network selenoid -p 8090:8080 aerokube/seleno
 ```
 
 Далее необходимо запустить opencart. За основу можно взять файл из репозитория лекции - 
-[docker-compose.yml](https://github.com/agridyaev/otus-docker-compose/blob/master/docker-compose-opencart.yml)
+[docker-compose.yml](https://gist.github.com/konflic/ecd93a4bf7666d97d62bcecbe2713e55#file-docker-compose-yml)
 
 Запускаем opencart с помощью следующей команды и дожидаемся окончания его запуска:
 
