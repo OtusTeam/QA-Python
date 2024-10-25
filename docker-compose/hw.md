@@ -30,8 +30,20 @@
 docker run -d --name selenoid-ui --network selenoid -p 8090:8080 aerokube/selenoid-ui:1.10.11 --selenoid-uri http://selenoid:4444
 ```
 
-Далее необходимо запустить opencart. За основу можно взять файл из репозитория лекции - 
+Далее необходимо запустить opencart. За основу можно взять файл - 
 [docker-compose.yml](https://gist.github.com/konflic/ecd93a4bf7666d97d62bcecbe2713e55#file-docker-compose-yml)
+
+**Важно!** В файл [docker-compose.yml](https://gist.github.com/konflic/ecd93a4bf7666d97d62bcecbe2713e55#file-docker-compose-yml)
+нужно обязательно добавить следующую секцию:
+
+```yaml
+networks:
+  default:
+    name: selenoid
+    external: true
+```
+
+Таким образом, контейнеры opencart и selenoid будут находиться в одной сети, что обеспечит их связность и позволит им взаимодействовать между собой.
 
 Запускаем opencart с помощью следующей команды и дожидаемся окончания его запуска:
 
