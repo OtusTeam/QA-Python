@@ -48,8 +48,11 @@ networks:
 Запускаем opencart с помощью следующей команды и дожидаемся окончания его запуска:
 
 ```shell
-docker-compose -f docker-compose.yml up
+PHPADMIN_PORT=<FREE_PORT> OPENCART_PORT=<FREE_PORT> LOCAL_IP=<YOUR_IP> docker-compose -f docker-compose.yml up
 ```
+
+**Важно!** При запуске команды `docker-compose up` в переменных окружения `PHPADMIN_PORT` и `OPENCART_PORT` нужно 
+передать номера незанятых портов на вашем компьютере и в переменной `LOCAL_IP` - IP-адрес вашего компьютера в вашей локальной сети. 
 
 Необходимо убедиться, что вы можете зайти на ваш opencart из selenoid. 
 Для этого в selenoid нужно запустить мануальную сессию любого браузера и попробовать запросить адрес http://opencart:8080/
