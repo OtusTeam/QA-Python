@@ -48,7 +48,7 @@ networks:
 Запускаем opencart с помощью следующей команды и дожидаемся окончания его запуска:
 
 ```shell
-docker-compose -f docker-compose-opencart.yml up
+docker-compose -f docker-compose.yml up
 ```
 
 Необходимо убедиться, что вы можете зайти на ваш opencart из selenoid. 
