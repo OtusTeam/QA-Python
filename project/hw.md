@@ -11,6 +11,19 @@
 3. Развернуть Jenkins и настроить автоматический запуск
 4. Настроить отчётность по результатам прогона
 
+### Примеры ресурсов:
+
+#### Frontend:
+
+- https://www.saucedemo.com/
+- https://automationintesting.online/
+
+#### Backend:
+
+- https://reqres.in/
+- https://www.jsonplaceholder.org/
+- https://httpbin.org/
+
 ### Критерии оценки:
 
 1. Использование паттерна PageObject
