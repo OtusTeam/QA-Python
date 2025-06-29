@@ -30,6 +30,7 @@ api https://reqres.in/api_**" не отражает сути выполненн�
 #### Frontend
 
 - https://www.saucedemo.com/
+- https://automationexercise.com/
 - https://automationintesting.online/
 
 #### Backend
@@ -37,6 +38,9 @@ api https://reqres.in/api_**" не отражает сути выполненн�
 - https://reqres.in/
 - https://www.jsonplaceholder.org/
 - https://httpbin.org/
+- https://fakerestapi.azurewebsites.net/
+- https://petstore.swagger.io/
+- https://restful-booker.herokuapp.com/apidoc/index.html
 
 ### Критерии оценки
 
