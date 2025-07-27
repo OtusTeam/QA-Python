@@ -39,8 +39,8 @@ docker run -d --name selenoid-ui --network selenoid -p 8090:8080 aerokube/seleno
 ```yaml
 networks:
   default:
-    name: selenoid
-    external: true
+    external:
+      name: selenoid
 ```
 
 Таким образом, контейнеры opencart и selenoid будут находиться в одной сети, что обеспечит их связность и позволит им взаимодействовать между собой.
@@ -66,14 +66,14 @@ PHPADMIN_PORT=<FREE_PORT> OPENCART_PORT=<FREE_PORT> LOCAL_IP=<YOUR_IP> docker-co
 Пробуем запустить тесты на selenoid - для этого выполняем следующую команду (опции могут отличаться в зависимости от того что вы указали в `conftest.py`):
 
 ```shell
-docker run --rm --network selenoid opencart-tests pytest -v tests/test_ui_opencart.py --opencart_url http://opencart:8080 --browser chrome --browser_version 120.0 --executor selenoid
+docker run --rm --network selenoid opencart-tests pytest -v tests/test_ui_opencart.py --opencart_url http://<LOCAL_IP>:<OPENCART_PORT> --browser chrome --browser_version 120.0 --executor selenoid
 ```
 
 С помощью этой команды мы запускаем наши тесты в браузере chrome 120.0 версии удалённо на selenoid.
 Тесты должны успешно запуститься и отработать на selenoid:
 
 ```shell
-docker run --rm --network selenoid opencart-tests pytest -v tests/test_ui_opencart.py --opencart_url http://opencart:8080 --browser chrome --browser_version 120.0 --executor selenoid
+docker run --rm --network selenoid opencart-tests pytest -v tests/test_ui_opencart.py --opencart_url http://192.168.1.79:8080 --browser chrome --browser_version 120.0 --executor selenoid
 ============================= test session starts ==============================
 platform linux -- Python 3.10.5, pytest-6.2.5, py-1.11.0, pluggy-1.3.0 -- /usr/local/bin/python
 cachedir: .pytest_cache
@@ -95,16 +95,22 @@ tests/test_ui_opencart.py::test_main_page_open_product PASSED            [100%]
 Так как opencart не стартует мгновенно, при запуске сервиса с тестами нужно организовать ожидание, пока opencart полностью
 перейдёт в рабочее состояние.
 
-Для этого можно использовать скрипт [wait-for-it.sh](wait-for-it.sh). Подробнее про этот скрипт можно почитать [тут](wait-for-it.md). 
-Текст этого скрипта нужно сохранить в файл с названием `wait-for-it.sh`, сделать файл исполняемым (`chmod +x wait-for-it.sh`) и добавить в образ с тестами.
-
-В `docker-compose.yml` в инструкции `command` сервиса `tests` скрипт [wait-for-it.sh](wait-for-it.sh) можно использовать так:
-```shell
-command: ./wait-for-it.sh opencart 8080 pytest -v tests/test_ui_opencart.py --opencart_url http://opencart:8080 --browser chrome --browser_version 120.0 --executor selenoid
+Для этого в описании сервиса `tests` можно использовать директиву `condition: service_healthy` в `depends_on`:
+```yaml
+depends_on:
+  opencart:
+    condition: service_healthy
 ```
+Данная директива позволяет гарантировать, что контейнер с тестами дождётся пока запустится opencart и затем запустит тесты.
 
-**Важно!** Для того, чтобы сработала команда, указанная в директиве `command` файла `docker-compose.yml` нужно чтобы в `Dockerfile` образа с тестами для запуска тестов использовалась директива `CMD`.
-
-Таким образом при запуске `docker-compose` контейнер с тестами дождётся пока запустится opencart и затем запустит тесты.
+**Важно!** Для того, чтобы сработала директива `condition: service_healthy` необходимо убедиться в наличии секции `healthcheck`
+в описании сервиса `opencart`:
+```yaml
+healthcheck:
+  test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+  interval: 10s
+  timeout: 5s
+  retries: 3
+```
 
 В итоге у вас должен получиться `docker-compose.yml` с помощью которого можно развернуть тестовое окружение и запустить тесты.
