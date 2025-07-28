@@ -107,7 +107,7 @@ depends_on:
 в описании сервиса `opencart`:
 ```yaml
 healthcheck:
-  test: [ "CMD", "curl", "-f", "http://localhost:8080" ]
+  test: [ "CMD", "curl", "-f", "http://localhost:${OPENCART_PORT}" ]
   interval: 10s
   timeout: 5s
   retries: 3
