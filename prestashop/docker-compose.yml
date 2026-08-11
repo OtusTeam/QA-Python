@@ -1,0 +1,102 @@
+services:
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: admin
+    ports:
+      - "8888:80"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - prestashop_network
+
+  db:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_DATABASE: prestashop
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-padmin"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - prestashop_network
+
+  prestashop:
+    image: prestashop/prestashop:9.1.4
+    container_name: prestashop
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      DB_SERVER: db
+      DB_NAME: prestashop
+      DB_USER: root
+      DB_PASSWD: admin
+      PS_INSTALL_AUTO: "1"
+      PS_LANGUAGE: "en"
+      PS_COUNTRY: "US"
+      ADMIN_MAIL: "admin@example.com"
+      ADMIN_PASSWD: "Admin123!"
+      PS_FOLDER_ADMIN: "administration"
+      PS_FOLDER_INSTALL: "install"
+    volumes:
+      - ps_data:/var/www/html
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - prestashop_network
+
+  prestashop_postinstall:
+    image: alpine:3.19
+    container_name: prestashop_postinstall
+    restart: "no"
+    depends_on:
+      - prestashop
+    volumes:
+      - ps_data:/var/www/html
+    command: >
+      sh -lc '
+        apk add --no-cache curl >/dev/null 2>&1 || true;
+
+        echo "Waiting for PrestaShop HTTP to respond...";
+        until curl -fsS http://prestashop/ >/dev/null; do sleep 5; done;
+
+        echo "Waiting for config to exist...";
+        until [ -f /var/www/html/config/settings.inc.php ] || [ -f /var/www/html/app/config/parameters.php ]; do sleep 2; done;
+
+        echo "Extra grace period...";
+        sleep 15;
+
+        echo "Removing install folders...";
+        rm -rf /var/www/html/install /var/www/html/install-dev || true;
+
+        echo "Clearing cache...";
+        rm -rf /var/www/html/var/cache/* || true;
+
+        echo "Done."
+      '
+    networks:
+      - prestashop_network
+
+networks:
+  prestashop_network:
+
+volumes:
+  db_data:
+    driver: local
+  ps_data:
+    driver: local
