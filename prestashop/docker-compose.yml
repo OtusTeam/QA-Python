@@ -35,7 +35,7 @@ services:
       - prestashop_network
 
   prestashop:
-    image: prestashop/prestashop:9.1.4
+    image: prestashop/prestashop:8.2.7
     container_name: prestashop
     restart: unless-stopped
     ports:
